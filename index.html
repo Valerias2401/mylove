@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Приглашение</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      background: #0a0a0a;
+      color: #d4c4a8;
+      font-family: 'Georgia', serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      text-align: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    .container { max-width: 400px; width: 100%; }
+
+    .page {
+      display: none;
+      opacity: 0;
+      transform: translateY(15px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .page.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .page.twilight.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      background-image: url('https://i.imgur.com/6RLL8EG.jpeg');
+      background-size: cover;
+      background-position: center;
+      opacity: 1;
+      transform: none;
+      animation: fadeInTwilight 1.5s ease;
+      z-index: 100;
+    }
+
+    .page.twilight.active::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(2px);
+    }
+
+    .page.honest.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      background-image: url('https://i.imgur.com/z8XdDJr.jpeg');
+      background-size: cover;
+      background-position: center;
+      opacity: 1;
+      transform: none;
+      animation: fadeInTwilight 1.5s ease;
+      z-index: 100;
+    }
+
+    .page.honest.active::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(2px);
+    }
+
+    .page.review.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      background-image: url('https://i.imgur.com/jh2U0qB.jpeg');
+      background-size: cover;
+      background-position: center;
+      opacity: 1;
+      transform: none;
+      animation: fadeInTwilight 1.5s ease;
+      z-index: 100;
+    }
+
+    .page.review.active::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(2px);
+    }
+
+    .twilight-overlay,
+    .honest-overlay,
+    .review-overlay {
+      position: relative;
+      z-index: 2;
+      background: rgba(10, 10, 10, 0.55);
+      padding: 40px 30px;
+      border-radius: 12px;
+      border: 1px solid rgba(212, 196, 168, 0.3);
+      max-width: 360px;
+      width: 90%;
+      text-align: center;
+    }
+
+    @keyframes fadeInTwilight {
+      0% { opacity: 0; transform: scale(1.05); filter: blur(12px) brightness(0.4); }
+      100% { opacity: 1; transform: scale(1); filter: blur(0) brightness(1); }
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 25px;
+      font-weight: normal;
+      line-height: 1.4;
+    }
+
+    h2 { margin: 5px 0; }
+
+    .small-label {
+      font-size: 14px;
+      font-style: italic;
+      opacity: 0.6;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    .label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      opacity: 0.6;
+      margin-bottom: 0;
+    }
+
+    .big-date, .big-time {
+      font-size: 34px;
+      margin: 5px 0 15px;
+      letter-spacing: 2px;
+    }
+
+    .ticket-photo {
+      max-width: 100%;
+      width: 360px;
+      margin: 15px auto;
+      display: block;
+    }
+
+    .wrong-img {
+      max-width: 100%;
+      width: 220px;
+      border-radius: 8px;
+      margin: 10px auto 25px;
+      display: block;
+      opacity: 0.85;
+    }
+
+    button {
+      background: transparent;
+      color: #d4c4a8;
+      border: 1px solid #d4c4a8;
+      padding: 12px 28px;
+      margin: 6px;
+      font-size: 15px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: 0.3s;
+    }
+
+    button:hover, button:active {
+      background: #d4c4a8;
+      color: #0a0a0a;
+    }
+
+    .buttons { display: flex; justify-content: center; flex-wrap: wrap; }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      background: transparent;
+      border: 1px solid #d4c4a8;
+      color: #d4c4a8;
+      font-family: inherit;
+      font-size: 14px;
+      padding: 10px;
+      margin: 15px 0;
+      resize: none;
+      outline: none;
+    }
+
+    .hearts {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      font-size: 36px;
+      margin: 20px 0;
+      user-select: none;
+    }
+
+    .hearts span {
+      transition: transform 0.2s ease, filter 0.2s ease;
+      filter: grayscale(1) brightness(1.5);
+      cursor: pointer;
+    }
+
+    .hearts span.lit {
+      filter: none;
+      transform: scale(1.15);
+    }
+
+    .hearts span:hover {
+      transform: scale(1.25);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #d4c4a8;
+      color: #0a0a0a;
+      padding: 12px 24px;
+      font-size: 15px;
+      border-radius: 4px;
+      opacity: 0;
+      transition: 0.4s ease;
+      pointer-events: none;
+      font-family: 'Georgia', serif;
+      white-space: nowrap;
+      z-index: 999;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <div id="page1" class="page active">
+    <h1>Один поход в кино<br>тебе или два другому?</h1>
+    <div class="buttons">
+      <button onclick="goToTwilight()">Мне</button>
+      <button onclick="showPage('pageWrong')">Другому</button>
+    </div>
+  </div>
+
+  <div id="pageWrong" class="page">
+    <h1>Ответ не верный</h1>
+    <img class="wrong-img" src="https://i.imgur.com/HfolGVK.png" alt="Ответ не верный">
+    <button onclick="showPage('page1')">Попробовать снова</button>
+  </div>
+
+  <div id="pageTwilight" class="page twilight">
+    <div class="twilight-overlay">
+      <p class="small-label">я так и знала.</p>
+      <h1>На Сумерки со мной пойдешь?</h1>
+      <div class="buttons">
+        <button onclick="showPage('pageHonest')">Естественно</button>
+        <button onclick="showPage('pageHonest')">Дадада</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="pageHonest" class="page honest">
+    <div class="honest-overlay">
+      <h1>Честно согласна?</h1>
+      <div class="buttons">
+        <button onclick="showPage('pageTicket')">Клянусь, да</button>
+        <button onclick="showToast()">Я ещё подумаю</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="pageTicket" class="page">
+    <p class="label">Дата сеанса</p>
+    <h2 class="big-date">17.09.3026</h2>
+    <p class="label">Время</p>
+    <h2 class="big-time">23:40</h2>
+
+    <img class="ticket-photo" src="https://i.imgur.com/EQVQBJ0.png" alt="Билет">
+
+    <button onclick="showPage('pageReview')" style="margin-top: 30px;">УРААА</button>
+  </div>
+
+  <div id="pageReview" class="page review">
+    <div class="review-overlay">
+      <h1>Ну как тебе?</h1>
+      <p>Оцени сайт и напиши отзыв 🖤</p>
+
+      <form action="https://formspree.io/f/xgaveqly" method="POST" id="reviewForm">
+        <div class="hearts" id="hearts">
+          <span onclick="setRating(1)">🤍</span>
+          <span onclick="setRating(2)">🤍</span>
+          <span onclick="setRating(3)">🤍</span>
+          <span onclick="setRating(4)">🤍</span>
+          <span onclick="setRating(5)">🤍</span>
+        </div>
+
+        <input type="hidden" name="rating" id="ratingInput" value="">
+
+        <textarea id="reviewText" name="message" placeholder="Твой отзыв..."></textarea>
+        <button type="submit">Отправить</button>
+      </form>
+    </div>
+  </div>
+
+</div>
+
+<div id="toast" class="toast">ну думай думай.. 🧍‍♀️</div>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function goToTwilight() {
+  showPage('pageTwilight');
+}
+
+function showToast() {
+  const toast = document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 2000);
+}
+
+let rating = 0;
+
+function setRating(value) {
+  rating = value;
+  document.getElementById('ratingInput').value = value;
+  const hearts = document.querySelectorAll('#hearts span');
+  hearts.forEach((heart, index) => {
+    if (index < value) {
+      heart.textContent = '❤️';
+      heart.classList.add('lit');
+    } else {
+      heart.textContent = '🤍';
+      heart.classList.remove('lit');
+    }
+  });
+}
+</script>
+</body>
+</html>
